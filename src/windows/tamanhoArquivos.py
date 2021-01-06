@@ -204,7 +204,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Tamanho Arquivos"))
         self.voltar.setText(_translate("MainWindow", "voltar"))
         self.btn_procurar.setText(_translate("MainWindow", "procurar"))
         self.btn_filtros.setText(_translate("MainWindow", "filtros"))
