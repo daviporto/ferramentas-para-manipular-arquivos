@@ -130,7 +130,7 @@ class Ui_MainWindow(object):
         self.resultado = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.resultado.setLocale(QtCore.QLocale(QtCore.QLocale.Portuguese, QtCore.QLocale.Angola))
         self.resultado.setReadOnly(True)
-        self.resultado.appendPlainText("escolha um diretorio e clike em procurar")
+        self.resultado.setPlainText("escolha um diretorio e clike em procurar")
         print(self.resultado.toPlainText())
         self.resultado.setObjectName("resultado")
         self.gridLayout.addWidget(self.resultado, 3, 0, 1, 4)
