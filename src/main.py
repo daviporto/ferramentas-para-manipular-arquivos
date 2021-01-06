@@ -1,7 +1,11 @@
+import sys
+
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication
-import sys
+
 from src.windows import tamanhoArquivos, laucher, bkup, separarJuntar, refatorar
+import qdarkstyle
+
 
 
 class TamanhoArquivos(QtWidgets.QMainWindow, tamanhoArquivos.Ui_MainWindow):
@@ -30,6 +34,7 @@ class MainMenuFrame(QtWidgets.QMainWindow, laucher.Ui_MainWindow):
     def __init__(self, parent=None):
         print('initiating')
         app = QApplication(sys.argv)
+        app.setStyleSheet(qdarkstyle.load_stylesheet())
         super(MainMenuFrame, self).__init__(parent)
         self.setupUi(self)
         self.btn_tamanho.clicked.connect(self.tamanho_arquivos)
@@ -60,5 +65,5 @@ class MainMenuFrame(QtWidgets.QMainWindow, laucher.Ui_MainWindow):
         self.a.show()
         self.hide()
 
-
-MainMenuFrame()
+if __name__ == '__main__':
+    MainMenuFrame()

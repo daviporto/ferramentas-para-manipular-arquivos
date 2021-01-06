@@ -3,7 +3,7 @@ import sys
 import time
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import pyqtSignal, QThread
+from PyQt5.QtCore import pyqtSignal, QThread, QRegularExpression
 from PyQt5.QtWidgets import QFileDialog
 
 from src.highliter import Highlighter
@@ -189,40 +189,47 @@ class Ui_MainWindow(object):
         self.highlother = Highlighter(self.txt_textoAlvo.document())
 
         self.lne_textAlvo.textChanged.connect(self.txtAlvoChanged)
+        self.cb_palavraToda.clicked.connect(self.txtAlvoChanged)
+        self.cb_keySensitive.clicked.connect(self.txtAlvoChanged)
         self.btn_escolheDiretorio.clicked.connect(self.escolherDiretorio)
-        self.btn_sustituir.clicked.connect(self.set_refactor)
-        self.btn_substituirTodos.clicked.connect(self.set_refactor_all)
-        self.btnPular.clicked.connect(self.set_pular)
+        self.btn_sustituir.clicked.connect(self.setRefactor)
+        self.btn_substituirTodos.clicked.connect(self.setRefactorAll)
+        self.btnPular.clicked.connect(self.setPular)
+        self.txtextensions.textChanged.connect(self.extensionsChanged)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.txtextensions, self.btn_escolheDiretorio)
 
-    def set_refactor(self):
+    def setRefactor(self):
         refactorThread.substituirPor = self.lne_substituirPor.text()
         refactorThread.refactor = True
 
-    def set_refactor_all(self):
+    def setRefactorAll(self):
         refactorThread.substituirPor = self.lne_substituirPor.text()
         refactorThread.refactorAll = True
 
-    def set_pular(self):
+    def setPular(self):
         refactorThread.pular = True
         print(refactorThread.pular)
 
-    def txtAlvoChanged(self, txt):
-        self.highlother.setExpression(txt, self.cb_keySensitive.isChecked())
+    def txtAlvoChanged(self, txt=None):
+        self.highlother.setExpression(self.lne_textAlvo.text(), self.cb_keySensitive.isChecked(), self.cb_palavraToda.isChecked())
 
     def escolherDiretorio(self):
         self.diretorio = QFileDialog.getExistingDirectory(self, caption="escolha o diretorio alvo")
         self.lbl_diretorio.setText(self.diretorio)
+
+    def extensionsChanged(self):
+        global default_extensions
+        default_extensions = self.txtextensions.toPlainText()
 
     def procurar(self):
         if not self.diretorio:
             Ui_Dialog(text="selecione o diretorio alvo primeiro",
                       title="diretorio alvo",
                       buttonText="selecionar",
-                      action=self.selecionar_diretorio_dialog)
+                      action=self.selecionarDiretorioDialog)
             return
 
         self.txtAlvo = self.lne_textAlvo.text()
@@ -236,21 +243,23 @@ class Ui_MainWindow(object):
             a.signal.connect(self.dialogPronto)
             return
 
+        exp =self.lne_textAlvo.text()
+        if self.cb_palavraToda.isChecked():
+            exp = "\\b" + exp + "\\b"
 
         if not self.cb_keySensitive.isChecked():
-            expression = QtCore.QRegularExpression(self.lne_textAlvo.text(),
-                                                   QtCore.QRegularExpression.CaseInsensitiveOption)
+            self.expression = QRegularExpression(exp)
         else:
-            expression = QtCore.QRegularExpression(self.lne_textAlvo.text())
+            self.expression = QRegularExpression(exp, QRegularExpression.CaseInsensitiveOption)
 
-        t = refactorThread(self.diretorio, expression)
+        t = refactorThread(self.diretorio, self.expression)
         t.appendTextSigal.connect(self.txt_textoAlvo.append)
         t.setTextSignal.connect(self.txt_textoAlvo.setText)
         t.statusBarSignal.connect(self.lbl_status.setText)
         t.focousSignal.connect(self.setFocousFormat)
         t.start()
 
-    def selecionar_diretorio_dialog(self):
+    def selecionarDiretorioDialog(self):
         self.escolherDiretorio()
         self.procurar()
 

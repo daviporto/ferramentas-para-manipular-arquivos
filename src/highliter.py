@@ -23,7 +23,10 @@ class Highlighter(QSyntaxHighlighter):
 
         self.expression = QRegularExpression()
 
-    def setExpression(self, exp, caseSensitive):
+    def setExpression(self, exp, caseSensitive, wholeWord):
+        if wholeWord:
+            exp = "\\b" + exp + "\\b"
+            print(exp)
         if caseSensitive:
             self.expression = QRegularExpression(exp)
         else:
