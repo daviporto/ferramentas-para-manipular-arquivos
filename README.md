@@ -2,6 +2,8 @@
 ferramentas como: Bkup e ignorar erros, refatorar uma árvore de diretórios,
 tamanho dos arquivos em uma  árvore de diretórios e separar um arquivo em pedaços menores e depois juntá-los novamente.
 
+Ultilizando PyQt5-> https://pypi.org/project/PyQt5/
+
 ![Menu.png](https://github.com/daviporto/ferramentas-para-manipular-arquivos/blob/master/prints/Menu.png?raw=true)
 ![RefatorarDiretorio.png](https://github.com/daviporto/ferramentas-para-manipular-arquivos/blob/master/prints/RefatorarDiretorio.png?raw=true)
 ![TamanhoArquivos.png](https://github.com/daviporto/ferramentas-para-manipular-arquivos/blob/master/prints/TamanhoArquivos.png?raw=true)
